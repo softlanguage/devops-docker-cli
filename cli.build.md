@@ -1,8 +1,31 @@
 
 - devops cicd
 
-```shell
+```shell Jenkins Remote Shell command
+set -e
+ci_image="hello:dev-${BUILD_NUMBER}"
+ci_stack="vip-api-app-01"
+url_dockerfile="https://git/dockerfile"
+url_compose="https://git/compose.yaml"
 
+sh ~/devops4ci.sh
+```
+
+```shell
+set -e
+# the follow can write into an script.sh file
+# wget url -O new-filename
+wget https://raw.githubusercontent.com/softlang-net/devops-docker-cli/main/cli.Dockerfile
+wget https://raw.githubusercontent.com/softlang-net/devops-docker-cli/main/compose.yaml
+
+# build
+docker-compose -f compose.yaml build --force-rm
+# push
+docker-compose -f compose.yaml push
+# purne
+docker image prune -f
+# docker deploy to swarm
+docker stack deploy --prune --with-registry-auth -c compose.yml ${ci_app_stack}
 ```
 
 - docker build scripts
