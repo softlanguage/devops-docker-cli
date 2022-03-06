@@ -3,18 +3,20 @@
 
 ```shell Jenkins Remote Shell command
 set -e
-ci_image="hello:dev-${BUILD_NUMBER}"
-ci_stack="vip-api-app-01"
-url_dockerfile="https://git/dockerfile"
-url_compose="https://git/compose.yaml"
+export ci_image="hello:dev-${BUILD_NUMBER}"
+export ci_stack="vip-api-app-01"
+export url_dockerfile="https://git/dockerfile"
+export url_compose="https://git/compose.yaml"
 
-sh ~/devops4ci.sh
+sh ~/.devops4ci.sh
 ```
-
-- ~/devops4ci.sh
 
 ```shell
 set -e
+
+# see environments
+env
+
 # the follow can write into an script.sh file
 # wget url -O new-filename
 wget https://raw.githubusercontent.com/softlang-net/devops-docker-cli/main/cli.Dockerfile
