@@ -1,0 +1,39 @@
+# docker-compose -f compose.yaml build
+# docker-compose -p host-devops -f compose.yaml up -d
+# docker-compose -p host-devops down
+# need compose.v2 https://github.com/docker/compose
+version: "3.8"
+volumes:
+  devops-home:
+services:
+  ci-devops:
+    # build image
+    build:
+      context: .
+      dockerfile: cli.Dockerfile
+      network: host
+      args:
+        P_USER: "ops"
+        P_PASS: "666666"
+    # container
+    image: cli-registry/devops:cli20.10.12
+    hostname: devops.ci
+    container_name: devops
+    environment:
+      TZ: "Asia/Shanghai"
+      # find docker group id by `grep -n docker /etc/group`
+      DOCKER_GROUP_NAME: "nogroup"
+      DOCKER_GROUP_ID: "0"
+    network_mode: bridge
+    ports:
+      - 2022:22
+    volumes:
+      - devops-home:/home/devops
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
