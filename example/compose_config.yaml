@@ -1,0 +1,21 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#configs
+version: "3.9"
+services:
+  redis:
+    image: redis:latest
+    deploy:
+      replicas: 1
+    configs:
+      - source: my_config
+        target: /redis_config
+        uid: '103'
+        gid: '103'
+        mode: 0440
+configs:
+  my_config:
+    file: ./my_config.txt
+  my_other_config:
+    external: true
+    
+# docker config create my_config ./config_file 
+# config is shared in docker swarm
