@@ -36,3 +36,12 @@ docker image prune -f
 # docker deploy to swarm
 docker stack deploy --prune --with-registry-auth -c compose.yml ${ci_stack}
 ```
+
+- docker-compose v2
+```shell
+# https://github.com/docker/compose
+# wget -c https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
+# chmod +x /usr/local/bin/docker-compose
+docker compose ls
+docker-compose -v
+```
