@@ -1,0 +1,41 @@
+# only support docker swarm service
+version: "3.8"
+volumes:
+  devops-home:
+services:
+  ci-devops:
+    # build image, support docker-compose v2
+    build:
+      context: .
+      dockerfile: cli.Dockerfile
+      network: host
+      args:
+        P_USER: "ops"
+        P_PASS: "666666"
+    # container
+    image: cli-registry/devops:cli20.10.12
+    hostname: devops.ci
+    container_name: devops
+    environment:
+      TZ: "Asia/Shanghai"
+      DOCKER_GROUP_NAME: "cli4docker"
+      DOCKER_GROUP_ID: "114"
+    network_mode: bridge
+    # docker config create ssh_config ./config
+    configs:
+      - source: ssh_config
+        target: /root/.ssh/config
+        #uid: '103'
+        #gid: '103'
+        mode: 0600
+    ports:
+      - 2022:22
+    volumes:
+      - devops-home:/home/devops
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
