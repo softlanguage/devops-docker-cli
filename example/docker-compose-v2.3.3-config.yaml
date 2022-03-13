@@ -6,6 +6,7 @@ services:
   ci-devops:
     image: nginx:alpine
     hostname: devops.ci
+    container_name: devops.ci
     environment:
       TZ: "Asia/Shanghai"
     configs:
