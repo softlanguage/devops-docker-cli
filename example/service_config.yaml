@@ -1,7 +1,6 @@
-# only support docker swarm service
+# only support docker swarm service (tested success)
+# docker stack deploy --prune -c compose.yaml test4cfg
 version: "3.8"
-volumes:
-  devops-home:
 services:
   ci-devops:
     # build image, support docker-compose v2
@@ -15,13 +14,10 @@ services:
     # container
     image: cli-registry/devops:cli20.10.12
     hostname: devops.ci
-    container_name: devops
     environment:
       TZ: "Asia/Shanghai"
       DOCKER_GROUP_NAME: "cli4docker"
       DOCKER_GROUP_ID: "114"
-    network_mode: bridge
-    # docker config create ssh_config ./config
     configs:
       - source: ssh_config
         target: /root/.ssh/config
@@ -39,3 +35,7 @@ services:
         limits:
           cpus: '1'
           memory: 512M
+configs:
+  ssh_config:
+    external: true
+# docker config create ssh_config ./config
