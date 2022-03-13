@@ -1,0 +1,27 @@
+# need docker/compose v2.3+ https://github.com/docker/compose
+# docker compose -p test4cfg -f compose.yaml up -d
+# docker compose -p test4cfg down
+version: "3.8"
+services:
+  ci-devops:
+    image: nginx:alpine
+    hostname: devops.ci
+    environment:
+      TZ: "Asia/Shanghai"
+    configs:
+      - source: ssh_config
+        target: /root/.ssh/config
+        #uid: '103'
+        #gid: '103'
+        mode: 0600
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+
+configs:
+  ssh_config:
+    file: ./compose.yaml
